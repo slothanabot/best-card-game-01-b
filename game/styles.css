@@ -1,0 +1,172 @@
+/* Tavern Tricks — warm wood, green felt and gold. All art is CSS: no images,
+   no network requests, everything ships under game/. */
+:root {
+  --felt: #1e5c3a;
+  --felt-dark: #14402a;
+  --wood: #3a2417;
+  --wood-light: #5a3a22;
+  --gold: #e8b64c;
+  --gold-dim: #b98a2e;
+  --cream: #f4ead8;
+  --ink: #241a12;
+  --red: #b3261e;
+  --panel: rgba(20, 12, 6, 0.82);
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; overflow: hidden; background: var(--wood); }
+body {
+  font-family: Georgia, 'Times New Roman', serif;
+  color: var(--cream);
+  background: radial-gradient(1200px 700px at 50% -10%, #6b4423 0%, var(--wood) 55%, #241207 100%);
+}
+#app { display: flex; flex-direction: column; height: 100vh; }
+button { font-family: inherit; cursor: pointer; }
+
+/* ---- header ---- */
+header {
+  display: flex; align-items: center; gap: 18px;
+  padding: 8px 18px; background: rgba(0,0,0,0.35);
+  border-bottom: 2px solid var(--gold-dim);
+}
+header h1 { font-size: 24px; margin: 0; color: var(--gold); letter-spacing: 1px; white-space: nowrap; }
+header h1 span { font-size: 13px; color: var(--cream); letter-spacing: 2px; }
+.hdr-item { font-size: 15px; white-space: nowrap; }
+.hdr-item b { color: var(--gold); }
+.trump-badge {
+  display: inline-block; min-width: 30px; text-align: center;
+  padding: 2px 8px; border-radius: 14px; font-size: 18px; line-height: 1.2;
+  background: var(--gold); color: var(--ink); font-weight: bold;
+}
+.hdr-spacer { flex: 1; }
+.hdr-btn {
+  background: var(--wood-light); color: var(--cream); border: 1px solid var(--gold-dim);
+  border-radius: 8px; padding: 6px 12px; font-size: 14px;
+}
+.hdr-btn:hover { background: #6e4a2c; }
+
+/* ---- main layout ---- */
+#main { flex: 1; display: flex; min-height: 0; }
+#table {
+  flex: 1; position: relative; margin: 10px; border-radius: 18px;
+  background: radial-gradient(ellipse at center, #2a7a4b 0%, var(--felt) 55%, var(--felt-dark) 100%);
+  border: 6px solid #6b4423; outline: 2px solid var(--gold-dim);
+  box-shadow: inset 0 0 60px rgba(0,0,0,0.5);
+  display: flex; flex-direction: column; align-items: center; justify-content: space-between;
+  padding: 10px 14px; overflow: hidden;
+}
+#side {
+  width: 248px; margin: 10px 10px 10px 0; background: var(--panel);
+  border: 1px solid var(--gold-dim); border-radius: 12px; padding: 12px;
+  overflow-y: auto; flex-shrink: 0;
+}
+#side h2 { font-size: 16px; color: var(--gold); margin: 2px 0 8px; border-bottom: 1px solid var(--gold-dim); padding-bottom: 4px; }
+#side table { width: 100%; border-collapse: collapse; font-size: 14px; }
+#side th, #side td { padding: 3px 4px; text-align: center; }
+#side th:first-child, #side td:first-child { text-align: left; }
+#side tr.me td { color: var(--gold); font-weight: bold; }
+#side .neg { color: #ff9a8a; }
+#message { font-size: 15px; font-style: italic; min-height: 22px; text-align: center; color: #ffe9b0; }
+#history { list-style: none; margin: 6px 0 0; padding: 0; font-size: 13px; line-height: 1.5; }
+#history li { border-bottom: 1px dotted rgba(232,182,76,0.35); padding: 2px 0; }
+#history .w { color: var(--gold); }
+
+/* ---- seats ---- */
+.seat-row { display: flex; align-items: flex-start; gap: 16px; width: 100%; justify-content: center; }
+.seat { text-align: center; min-width: 150px; }
+.seat .name { font-size: 16px; font-weight: bold; }
+.seat .name .dealer { color: var(--gold); font-size: 12px; }
+.seat .sub { font-size: 13px; color: #ffe9b0; }
+.seat.active .name { color: var(--gold); text-shadow: 0 0 8px rgba(232,182,76,0.8); }
+.seat.me.active .sub::after { content: '  ◀ your move'; color: var(--gold); }
+.mini-hand { display: flex; justify-content: center; margin-top: 4px; min-height: 34px; }
+.mini-card {
+  width: 24px; height: 34px; margin-left: -12px; border-radius: 4px;
+  background: repeating-linear-gradient(45deg, #7a1f1f 0 6px, #5e1515 6px 12px);
+  border: 1px solid #d8c9a8;
+}
+.mini-card:first-child { margin-left: 0; }
+#middle { display: flex; width: 100%; align-items: center; justify-content: space-between; flex: 1; min-height: 0; }
+#middle .seat { min-width: 120px; }
+#trick-area {
+  position: relative; width: 340px; height: 210px; flex-shrink: 0;
+  border: 2px dashed rgba(232,182,76,0.45); border-radius: 14px;
+}
+#trick-area .slot { position: absolute; }
+#trick-area .slot.top { top: 6px; left: 50%; transform: translateX(-50%); }
+#trick-area .slot.bottom { bottom: 6px; left: 50%; transform: translateX(-50%); }
+#trick-area .slot.left { left: 8px; top: 50%; transform: translateY(-50%); }
+#trick-area .slot.right { right: 8px; top: 50%; transform: translateY(-50%); }
+#trick-area .slot .who { text-align: center; font-size: 11px; color: #ffe9b0; margin-top: 2px; }
+#trick-area .hint { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: rgba(255,233,176,0.6); font-style: italic; font-size: 15px; pointer-events: none; }
+
+/* ---- cards ---- */
+.card {
+  width: 74px; height: 104px; border-radius: 9px; background: #fdf8ee;
+  color: var(--ink); position: relative; box-shadow: 0 3px 8px rgba(0,0,0,0.45);
+  user-select: none; flex-shrink: 0;
+}
+.card.red { color: var(--red); }
+.card .corner { position: absolute; top: 4px; left: 6px; text-align: center; line-height: 1.05; font-weight: bold; }
+.card .corner .r { font-size: 19px; display: block; }
+.card .corner .s { font-size: 15px; display: block; }
+.card .corner.br { top: auto; left: auto; bottom: 4px; right: 6px; transform: rotate(180deg); }
+.card .pip { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 40px; }
+.card.back {
+  background: repeating-linear-gradient(45deg, #7a1f1f 0 8px, #5e1515 8px 16px);
+  border: 2px solid #d8c9a8;
+}
+#hand { display: flex; justify-content: center; align-items: flex-end; min-height: 118px; width: 100%; }
+#hand .card { margin-left: -14px; transition: transform 0.12s ease, box-shadow 0.12s ease; }
+#hand .card:first-child { margin-left: 0; }
+#hand .card.playable { cursor: pointer; }
+#hand .card.playable:hover, #hand .card.selected { transform: translateY(-16px); box-shadow: 0 8px 16px rgba(0,0,0,0.6), 0 0 0 2px var(--gold); }
+#hand .card.dim { opacity: 0.45; }
+#hand .card:not(.playable) { cursor: default; }
+#hand-label { font-size: 14px; text-align: center; color: #ffe9b0; margin-top: 2px; }
+
+/* ---- overlays ---- */
+.overlay {
+  position: fixed; inset: 0; background: rgba(15, 8, 3, 0.78);
+  display: flex; align-items: center; justify-content: center; z-index: 20;
+}
+.panel {
+  background: linear-gradient(160deg, #2c1c0e, #1d1208);
+  border: 2px solid var(--gold); border-radius: 16px; padding: 28px 34px;
+  max-width: 620px; width: 92%; text-align: center; box-shadow: 0 12px 40px rgba(0,0,0,0.7);
+  max-height: 92vh; overflow-y: auto;
+}
+.panel h2 { color: var(--gold); font-size: 34px; margin: 0 0 6px; }
+.panel h3 { color: var(--gold); font-size: 22px; margin: 0 0 10px; }
+.panel p { font-size: 16px; line-height: 1.55; margin: 8px 0; }
+.panel .rules { text-align: left; font-size: 15px; line-height: 1.6; }
+.panel .rules li { margin-bottom: 4px; }
+.big-btn {
+  background: var(--gold); color: var(--ink); border: none; border-radius: 10px;
+  font-size: 19px; font-weight: bold; padding: 12px 30px; margin-top: 12px;
+}
+.big-btn:hover { background: #f5c95e; }
+.bid-row { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin: 14px 0; }
+.bid-btn {
+  width: 52px; height: 52px; border-radius: 10px; font-size: 20px; font-weight: bold;
+  background: #fdf8ee; color: var(--ink); border: 2px solid var(--gold-dim);
+}
+.bid-btn:hover { background: var(--gold); }
+.trump-row { display: flex; gap: 12px; justify-content: center; margin: 14px 0; }
+.trump-btn {
+  width: 84px; height: 84px; border-radius: 12px; font-size: 40px;
+  background: #fdf8ee; border: 2px solid var(--gold-dim);
+}
+.trump-btn.red { color: var(--red); }
+.trump-btn:hover { background: var(--gold); }
+.score-table { margin: 10px auto; border-collapse: collapse; font-size: 16px; }
+.score-table th, .score-table td { padding: 5px 14px; text-align: center; border-bottom: 1px solid rgba(232,182,76,0.3); }
+.score-table th:first-child, .score-table td:first-child { text-align: left; }
+.score-table tr.me td { color: var(--gold); font-weight: bold; }
+.win { font-size: 40px; }
+#status { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+@media (max-width: 900px) {
+  #side { display: none; }
+  .card { width: 58px; height: 82px; }
+  .card .pip { font-size: 30px; }
+  #trick-area { width: 260px; height: 170px; }
+}
